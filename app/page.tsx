@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
+import PolaroidSlider from './PolaroidSlider';
 
 interface Variant {
   id: number;
@@ -32,7 +33,7 @@ export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Ganti dengan nomor WhatsApp kamu (contoh: 6281234567890)
+  // Nomor WhatsApp tujuan checkout
   const NO_WHATSAPP = '0895382019126';
 
   useEffect(() => {
@@ -142,46 +143,49 @@ export default function Home() {
           <p className="text-center text-neutral-500">Memuat katalog...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {templates.map((tpl) => (
-              <div key={tpl.id} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col">
-                <div className="w-full bg-neutral-100 flex items-center justify-center p-4">
-  <img
-    src={tpl.image_url}
-    alt={tpl.name}
-    className="h-96 w-auto max-w-full object-contain rounded-lg shadow-sm"
-  />
-</div>
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold text-neutral-800">{tpl.name}</h3>
-                    <p className="text-neutral-500 text-sm mt-1 mb-6">{tpl.description}</p>
+            {templates.map((tpl) => {
+              // Memisahkan URL berkoma menjadi array gambar
+              const photoList = tpl.image_url ? tpl.image_url.split(',') : [];
+
+              return (
+                <div key={tpl.id} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col">
+                  {/* Slider Carousel Polaroid */}
+                  <div className="w-full bg-neutral-100 flex items-center justify-center p-4">
+                    <PolaroidSlider images={photoList} name={tpl.name} />
                   </div>
 
-                  <div className="border-t border-neutral-100 pt-4">
-                    <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider block mb-3">Pilih Ukuran:</span>
-                    <div className="flex flex-col gap-2.5">
-                      {tpl.template_variants?.map((v) => (
-                        <div
-                          key={v.id}
-                          className="flex justify-between items-center bg-neutral-50 border border-neutral-200/80 p-3 rounded-xl text-sm"
-                        >
-                          <div>
-                            <span className="font-medium text-neutral-700 block">{v.size_name}</span>
-                            <span className="font-semibold text-emerald-600">Rp{v.price.toLocaleString('id-ID')}</span>
-                          </div>
-                          <button
-                            onClick={() => addToCart(tpl, v)}
-                            className="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition"
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-xl font-semibold text-neutral-800">{tpl.name}</h3>
+                      <p className="text-neutral-500 text-sm mt-1 mb-6">{tpl.description}</p>
+                    </div>
+
+                    <div className="border-t border-neutral-100 pt-4">
+                      <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider block mb-3">Pilih Ukuran:</span>
+                      <div className="flex flex-col gap-2.5">
+                        {tpl.template_variants?.map((v) => (
+                          <div
+                            key={v.id}
+                            className="flex justify-between items-center bg-neutral-50 border border-neutral-200/80 p-3 rounded-xl text-sm"
                           >
-                            + Keranjang
-                          </button>
-                        </div>
-                      ))}
+                            <div>
+                              <span className="font-medium text-neutral-700 block">{v.size_name}</span>
+                              <span className="font-semibold text-emerald-600">Rp{v.price.toLocaleString('id-ID')}</span>
+                            </div>
+                            <button
+                              onClick={() => addToCart(tpl, v)}
+                              className="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition"
+                            >
+                              + Keranjang
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
