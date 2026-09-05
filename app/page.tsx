@@ -149,8 +149,21 @@ export default function Home() {
 
               return (
                 <div key={tpl.id} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col">
-                  {/* Slider Carousel Polaroid */}
-                  <div className="w-full bg-neutral-100 flex items-center justify-center p-4">
+                  {/* Wadah Slider dengan Background Estetik & Minimalis */}
+                  <div className="w-full relative overflow-hidden bg-gradient-to-br from-rose-50/60 via-amber-50/40 to-sky-50/60 flex items-center justify-center p-6 border-b border-neutral-100">
+                    {/* Aksen glow lingkaran lembut */}
+                    <div className="absolute -top-12 -left-12 w-36 h-36 bg-pink-200/40 rounded-full blur-2xl pointer-events-none" />
+                    <div className="absolute -bottom-12 -right-12 w-36 h-36 bg-sky-200/40 rounded-full blur-2xl pointer-events-none" />
+                    
+                    {/* Pola bintik samar (aesthetic dot grid) */}
+                    <div 
+                      className="absolute inset-0 opacity-[0.18] pointer-events-none" 
+                      style={{
+                        backgroundImage: 'radial-gradient(#737373 1px, transparent 1px)',
+                        backgroundSize: '16px 16px',
+                      }} 
+                    />
+
                     <PolaroidSlider images={photoList} name={tpl.name} />
                   </div>
 
