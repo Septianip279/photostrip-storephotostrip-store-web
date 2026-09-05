@@ -150,13 +150,9 @@ export default function Home() {
               return (
                 <div key={tpl.id} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col">
                   {/* Slider Carousel Polaroid */}
-                  <div className="w-full relative overflow-hidden bg-gradient-to-br from-rose-50/70 via-amber-50/40 to-sky-50/70 flex items-center justify-center p-6 border-b border-neutral-100">
-  {/* Aksen glow lingkaran samar di pojok */}
-  <div className="absolute -top-10 -left-10 w-32 h-32 bg-pink-200/30 rounded-full blur-2xl pointer-events-none" />
-  <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-sky-200/30 rounded-full blur-2xl pointer-events-none" />
-
-  <PolaroidSlider images={photoList} name={tpl.name} />
-</div>
+                  <div className="w-full bg-neutral-100 flex items-center justify-center p-4">
+                    <PolaroidSlider images={photoList} name={tpl.name} />
+                  </div>
 
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
