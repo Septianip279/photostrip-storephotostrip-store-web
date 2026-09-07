@@ -9,7 +9,7 @@ export default function MusicPlayer() {
   // Formatnya: https://open.spotify.com/embed/track/[ID_LAGU]?utm_source=generator&theme=0
   // (atau /embed/playlist/[ID_PLAYLIST] jika ingin satu playlist)
   const SPOTIFY_EMBED_URL =
-    'https://open.spotify.com/track/4NmiNWf3mFp078EFfvvgnr?si=4c51e7d948fb4ddf';
+    'https://open.spotify.com/track/4NmiNWf3mFp078EFfvvgnr?si=https://open.spotify.com/track/4NmiNWf3mFp078EFfvvgnr?si=dbd83c0cecaf46f5';
 
   return (
     <div className="fixed bottom-6 left-6 z-50 select-none">
