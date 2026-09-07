@@ -8,9 +8,7 @@ export default function MusicPlayer() {
   // 🎵 Ganti link di dalam src ini dengan lagu/playlist Spotify yang kamu mau!
   // Formatnya: https://open.spotify.com/embed/track/[ID_LAGU]?utm_source=generator&theme=0
   // (atau /embed/playlist/[ID_PLAYLIST] jika ingin satu playlist)
-  const SPOTIFY_EMBED_URL =
-    'https://open.spotify.com/track/4NmiNWf3mFp078EFfvvgnr?si=https://open.spotify.com/track/4NmiNWf3mFp078EFfvvgnr?si=dbd83c0cecaf46f5';
-
+  const SPOTIFY_EMBED_URL = 'https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?utm_source=generator&theme=0';
   return (
     <div className="fixed bottom-6 left-6 z-50 select-none">
       {/* Pop-up Spotify Player */}
