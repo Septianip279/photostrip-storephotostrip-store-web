@@ -28,37 +28,73 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  // Ambil daftar template
-  const fetchTemplates = async () => {
-    const { data, error } = await supabase
+  // State untuk Pengaturan Musik
+  const [musicUrl, setMusicUrl] = useState('');
+  const [musicTitle, setMusicTitle] = useState('');
+  const [savingMusic, setSavingMusic] = useState(false);
+  const [musicMessage, setMusicMessage] = useState('');
+
+  // Ambil daftar template & pengaturan musik
+  const fetchData = async () => {
+    // Ambil templates
+    const { data: tplData } = await supabase
       .from('templates')
       .select('*, template_variants(*)')
       .order('id', { ascending: false });
 
-    if (!error && data) {
-      setTemplates(data as Template[]);
+    if (tplData) setTemplates(tplData as Template[]);
+
+    // Ambil pengaturan musik
+    const { data: settingsData } = await supabase
+      .from('site_settings')
+      .select('*');
+
+    if (settingsData) {
+      const urlSetting = settingsData.find((s) => s.key === 'music_url');
+      const titleSetting = settingsData.find((s) => s.key === 'music_title');
+      if (urlSetting) setMusicUrl(urlSetting.value);
+      if (titleSetting) setMusicTitle(titleSetting.value);
     }
   };
 
   useEffect(() => {
-    fetchTemplates();
+    fetchData();
   }, []);
 
-  // Handle pemilihan banyak file
+  // Simpan Pengaturan Musik
+  const handleSaveMusic = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingMusic(true);
+    setMusicMessage('');
+
+    try {
+      const updates = [
+        { key: 'music_url', value: musicUrl },
+        { key: 'music_title', value: musicTitle || 'Background Music' },
+      ];
+
+      const { error } = await supabase.from('site_settings').upsert(updates);
+      if (error) throw error;
+
+      setMusicMessage('Lagu berhasil diperbarui! Halaman utama akan memutar lagu ini.');
+    } catch (err: any) {
+      setMusicMessage(`Gagal menyimpan lagu: ${err.message}`);
+    } finally {
+      setSavingMusic(false);
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
-      // Tambahkan ke file yang sudah ada
       setFiles((prev) => [...prev, ...selectedFiles]);
     }
   };
 
-  // Hapus satu foto dari list sebelum diupload
   const handleRemoveFile = (indexToRemove: number) => {
     setFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
-  // Tambah template baru dengan banyak foto
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (files.length === 0) {
@@ -72,7 +108,6 @@ export default function AdminPage() {
     try {
       const uploadedUrls: string[] = [];
 
-      // Unggah semua file terpilih ke Supabase Storage
       for (const file of files) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
@@ -91,10 +126,8 @@ export default function AdminPage() {
         uploadedUrls.push(publicUrlData.publicUrl);
       }
 
-      // Gabungkan semua URL dengan koma
       const combinedImageUrl = uploadedUrls.join(',');
 
-      // Simpan data template ke database
       const { data: templateData, error: templateError } = await supabase
         .from('templates')
         .insert([{ name, image_url: combinedImageUrl, description }])
@@ -103,7 +136,6 @@ export default function AdminPage() {
 
       if (templateError) throw templateError;
 
-      // Buat varian ukuran
       const variantsToInsert = [
         {
           template_id: templateData.id,
@@ -127,7 +159,7 @@ export default function AdminPage() {
       setName('');
       setFiles([]);
       setDescription('');
-      fetchTemplates();
+      fetchData();
     } catch (err: any) {
       setMessage(`Gagal menyimpan: ${err.message}`);
     } finally {
@@ -135,7 +167,6 @@ export default function AdminPage() {
     }
   };
 
-  // Hapus template
   const handleDelete = async (id: number) => {
     const konfirmasi = confirm('Yakin ingin menghapus template ini?');
     if (!konfirmasi) return;
@@ -159,6 +190,69 @@ export default function AdminPage() {
           <Link href="/" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 underline">
             ← Kembali ke Katalog Utama
           </Link>
+        </div>
+
+        {/* Form Pengaturan Musik Background */}
+        <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-rose-500 text-lg">🎵</span>
+            <h2 className="text-lg font-bold text-neutral-800">Pengaturan Musik Background</h2>
+          </div>
+          <p className="text-xs text-neutral-500 mb-4">
+            Masukkan link video YouTube atau YouTube Music untuk mengganti lagu toko secara instan.
+          </p>
+
+          {musicMessage && (
+            <div
+              className={`p-3.5 mb-4 rounded-xl text-xs font-medium ${
+                musicMessage.includes('Berhasil')
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+              }`}
+            >
+              {musicMessage}
+            </div>
+          )}
+
+          <form onSubmit={handleSaveMusic} className="flex flex-col gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-600 uppercase mb-1">
+                  Judul Lagu
+                </label>
+                <input
+                  type="text"
+                  value={musicTitle}
+                  onChange={(e) => setMusicTitle(e.target.value)}
+                  placeholder="Contoh: What If I Call"
+                  className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-neutral-600 uppercase mb-1">
+                  Link YouTube / YouTube Music
+                </label>
+                <input
+                  type="text"
+                  value={musicUrl}
+                  onChange={(e) => setMusicUrl(e.target.value)}
+                  placeholder="https://music.youtube.com/watch?v=F2PsSZKweTc"
+                  className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={savingMusic}
+              className="self-start mt-1 bg-neutral-900 hover:bg-neutral-800 disabled:bg-neutral-400 text-white font-medium px-5 py-2.5 rounded-xl transition text-xs"
+            >
+              {savingMusic ? 'Menyimpan Musik...' : 'Simpan Musik Baru'}
+            </button>
+          </form>
         </div>
 
         {message && (
@@ -203,11 +297,10 @@ export default function AdminPage() {
                 className="w-full border border-neutral-300 rounded-lg p-2 text-sm focus:outline-neutral-800 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-white hover:file:bg-neutral-700"
               />
 
-              {/* Preview foto-foto yang dipilih sebelum diupload */}
               {files.length > 0 && (
                 <div className="mt-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200">
                   <p className="text-xs font-semibold text-neutral-600 mb-2">
-                    {files.length} foto dipilih (bisa kamu hapus jika salah pilih):
+                    {files.length} foto dipilih:
                   </p>
                   <div className="flex flex-wrap gap-3">
                     {files.map((file, idx) => (
