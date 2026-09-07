@@ -14,38 +14,23 @@ export default function MusicPlayer() {
   const [isReady, setIsReady] = useState(false);
   const playerRef = useRef<any>(null);
 
-  // 🎵 GANTI ID VIDEO YOUTUBE INI DENGAN LAGU PILIHANMU!
-  // Contoh: 'jfKfPfyJRdk' (Lofi Girl)
-  // Kalau link YouTubenya: https://www.youtube.com/watch?v=5qap5aO4i9A
-  // maka ID yang diambil cukup: 5qap5aO4i9A
-  const YOUTUBE_VIDEO_ID = 'aMqOtlVwQYM&si=mQ7Xbixk-TSbckTK';
+  // 🎵 ID Lagu "What If I Call" oleh Alex Crichton
+  const YOUTUBE_VIDEO_ID = 'F2PsSZKweTc';
 
   useEffect(() => {
-    // Memuat YouTube IFrame API secara resmi
-    if (!window.YT) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
-
-      window.onYouTubeIframeAPIReady = () => {
-        initPlayer();
-      };
-    } else {
-      initPlayer();
-    }
-
-    function initPlayer() {
-      if (playerRef.current) return;
-      playerRef.current = new window.YT.Player('yt-hidden-player', {
-        height: '0',
-        width: '0',
+    // Fungsi inisialisasi pemutar YouTube
+    const initPlayer = () => {
+      if (playerRef.current || !window.YT) return;
+      playerRef.current = new window.YT.Player('yt-bg-player', {
+        height: '1',
+        width: '1',
         videoId: YOUTUBE_VIDEO_ID,
         playerVars: {
           autoplay: 0,
           loop: 1,
           playlist: YOUTUBE_VIDEO_ID,
           controls: 0,
+          playsinline: 1,
         },
         events: {
           onReady: () => {
@@ -58,6 +43,19 @@ export default function MusicPlayer() {
           },
         },
       });
+    };
+
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
+
+      window.onYouTubeIframeAPIReady = () => {
+        initPlayer();
+      };
+    } else {
+      initPlayer();
     }
   }, []);
 
@@ -73,12 +71,12 @@ export default function MusicPlayer() {
 
   return (
     <div className="fixed bottom-6 left-6 z-50 select-none">
-      {/* YouTube Player Asli Disembunyikan (Audio Saja di Background) */}
-      <div className="hidden">
-        <div id="yt-hidden-player" />
+      {/* Container YouTube Player yang disembunyikan secara visual tanpa mematikan API */}
+      <div className="absolute pointer-events-none opacity-0 w-0 h-0 overflow-hidden">
+        <div id="yt-bg-player" />
       </div>
 
-      {/* Tombol Kapsul Floating Estetik */}
+      {/* Tombol Floating Minimalist */}
       <button
         type="button"
         onClick={togglePlay}
@@ -88,7 +86,7 @@ export default function MusicPlayer() {
             : 'bg-white/90 text-neutral-800 hover:text-neutral-900 border-neutral-200/90 hover:bg-white'
         }`}
       >
-        {/* Ikon Play atau Animasi Suara */}
+        {/* Ikon Musik / Gelombang Suara */}
         <span className="flex items-center justify-center w-4 h-4">
           {isPlaying ? (
             <span className="flex items-end gap-[2.5px] h-3.5">
@@ -103,9 +101,9 @@ export default function MusicPlayer() {
           )}
         </span>
 
-        {/* Teks Status */}
+        {/* Info Lagu */}
         <span className="text-xs font-semibold tracking-tight">
-          {isPlaying ? 'Now Playing ♪' : isReady ? 'Play Music' : 'Loading...'}
+          {isPlaying ? 'What If I Call ♪' : isReady ? 'Play Music' : 'Memuat Musik...'}
         </span>
       </button>
     </div>
