@@ -119,18 +119,46 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-neutral-50 pb-20">
-      {/* Navbar */}
-      <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-neutral-200 z-20 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold tracking-tight text-neutral-800">Photostrip Studio</h1>
-          <button
-            onClick={() => setIsCartOpen(!isCartOpen)}
-            className="relative bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-sm font-medium transition"
-          >
-            Keranjang ({totalItem})
-          </button>
-        </div>
-      </nav>
+      {/* Minimalist Floating Navbar */}
+      <header className="sticky top-4 z-40 px-4 sm:px-6">
+        <nav className="max-w-4xl mx-auto bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-5 py-3 flex items-center justify-between transition-all">
+          {/* Logo / Nama Brand */}
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-neutral-900 animate-pulse" />
+            <a href="#" className="font-semibold text-neutral-900 tracking-tight text-sm sm:text-base hover:opacity-80 transition">
+              Photostrip<span className="font-light text-neutral-400">Studio</span>
+            </a>
+          </div>
+
+          {/* Menu / Tombol Aksi */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="group relative flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition shadow-sm active:scale-95"
+            >
+              {/* Ikon Tas / Keranjang Minimalis */}
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="w-4 h-4 transition-transform group-hover:scale-110" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor" 
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              <span>Keranjang</span>
+
+              {/* Badge Jumlah Item */}
+              {totalItem > 0 && (
+                <span className="ml-0.5 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-4 text-center">
+                  {totalItem}
+                </span>
+              )}
+            </button>
+          </div>
+        </nav>
+      </header>
 
       {/* Katalog */}
       <section className="max-w-5xl mx-auto p-6 md:p-10">
