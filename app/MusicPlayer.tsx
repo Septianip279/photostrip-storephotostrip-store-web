@@ -5,22 +5,17 @@ import { supabase } from './supabaseClient';
 
 export default function MusicPlayer() {
   const [isOpen, setIsOpen] = useState(false);
-  
-  // State untuk menyimpan ID dan Judul lagu dari database
-  const [videoId, setVideoId] = useState('F2PsSZKweTc'); // Default awal
+  const [videoId, setVideoId] = useState('F2PsSZKweTc');
   const [musicTitle, setMusicTitle] = useState('What If I Call');
 
-  // Fungsi untuk mengekstrak ID YouTube 11 Karakter dari link apapun
   const extractVideoId = (url: string) => {
     if (!url) return 'F2PsSZKweTc';
     const cleanUrl = url.trim();
-    // Regex ini otomatis mengambil tepat 11 karakter ID dan mengabaikan embel-embel &si= atau ?si=
     const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|music\.youtube\.com\/watch\?v=)([^"&?\/\s]{11})/;
     const match = cleanUrl.match(regExp);
     return match ? match[1] : cleanUrl.slice(0, 11);
   };
 
-  // Mengambil lagu dari database saat komponen dimuat
   useEffect(() => {
     async function loadMusicSetting() {
       const { data, error } = await supabase
@@ -45,37 +40,40 @@ export default function MusicPlayer() {
 
   return (
     <div className="fixed bottom-6 left-6 z-50 select-none">
-      {/* Mini Player Popup Estetik */}
-      {isOpen && (
-        <div className="mb-3 w-72 sm:w-80 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.15)] border border-neutral-200/90 transition-all duration-300">
-          <div className="flex justify-between items-center px-1 mb-2">
-            <div className="flex items-center gap-1.5 overflow-hidden pr-2">
-              <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0 animate-ping" />
-              <span className="text-xs font-semibold text-neutral-800 truncate">
-                {musicTitle} ♪
-              </span>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-neutral-400 hover:text-neutral-700 text-xs px-1.5 py-0.5 rounded-full hover:bg-neutral-100 transition shrink-0"
-              title="Tutup Player"
-            >
-              ✕
-            </button>
+      {/* Container Kotak Player: Tetap hidup di DOM agar musik tidak mati saat ditutup */}
+      <div
+        className={`mb-3 w-72 sm:w-80 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.15)] border border-neutral-200/90 transition-all duration-300 origin-bottom-left ${
+          isOpen
+            ? 'opacity-100 scale-100 pointer-events-auto'
+            : 'opacity-0 scale-95 pointer-events-none absolute bottom-12'
+        }`}
+      >
+        <div className="flex justify-between items-center px-1 mb-2">
+          <div className="flex items-center gap-1.5 overflow-hidden pr-2">
+            <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0 animate-ping" />
+            <span className="text-xs font-semibold text-neutral-800 truncate">
+              {musicTitle} ♪
+            </span>
           </div>
-
-          {/* Embed Video YouTube yang dinamis dari database */}
-          <div className="rounded-xl overflow-hidden shadow-inner bg-neutral-950 aspect-video w-full">
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1`}
-              title={musicTitle}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-neutral-400 hover:text-neutral-700 text-xs px-1.5 py-0.5 rounded-full hover:bg-neutral-100 transition shrink-0"
+            title="Tutup Tampilan"
+          >
+            ✕
+          </button>
         </div>
-      )}
+
+        <div className="rounded-xl overflow-hidden shadow-inner bg-neutral-950 aspect-video w-full">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1`}
+            title={musicTitle}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </div>
 
       {/* Tombol Kapsul Floating Minimalist */}
       <button
@@ -102,7 +100,7 @@ export default function MusicPlayer() {
         </span>
 
         <span className="text-xs font-semibold tracking-tight">
-          {isOpen ? 'Sembunyikan' : 'Putar Musik ♪'}
+          {isOpen ? 'Sembunyikan' : 'Musik ♪'}
         </span>
       </button>
     </div>
