@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
 import PolaroidSlider from './PolaroidSlider';
+import MusicPlayer from './MusicPlayer';
 
 interface Variant {
   id: number;
@@ -119,18 +120,40 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-neutral-50 pb-20">
-      {/* Navbar */}
-      <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-neutral-200 z-20 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold tracking-tight text-neutral-800">Photostrip Studio</h1>
+      {/* Minimalist Floating Capsule Navbar */}
+      <header className="sticky top-6 z-40 px-4 sm:px-6 mb-10">
+        <nav className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] rounded-full px-6 py-3.5 flex items-center justify-between transition-all">
+          <a href="#" className="flex items-center gap-2.5 group">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
+            <span className="font-bold text-neutral-800 tracking-tight text-base sm:text-lg">
+              Photostrip<span className="font-normal text-neutral-400">Studio</span>
+            </span>
+          </a>
+
           <button
-            onClick={() => setIsCartOpen(!isCartOpen)}
-            className="relative bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-sm font-medium transition"
+            onClick={() => setIsCartOpen(true)}
+            className="group relative flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition shadow-sm active:scale-95"
           >
-            Keranjang ({totalItem})
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 transition-transform group-hover:scale-110"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <span>Keranjang</span>
+
+            {totalItem > 0 && (
+              <span className="ml-0.5 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-4 text-center">
+                {totalItem}
+              </span>
+            )}
           </button>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       {/* Katalog */}
       <section className="max-w-5xl mx-auto p-6 md:p-10">
@@ -144,24 +167,21 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {templates.map((tpl) => {
-              // Memisahkan URL berkoma menjadi array gambar
               const photoList = tpl.image_url ? tpl.image_url.split(',') : [];
 
               return (
                 <div key={tpl.id} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col">
-                  {/* Wadah Slider dengan Background Estetik & Minimalis */}
+                  {/* Wadah Slider dengan Background Estetik */}
                   <div className="w-full relative overflow-hidden bg-gradient-to-br from-rose-50/60 via-amber-50/40 to-sky-50/60 flex items-center justify-center p-6 border-b border-neutral-100">
-                    {/* Aksen glow lingkaran lembut */}
                     <div className="absolute -top-12 -left-12 w-36 h-36 bg-pink-200/40 rounded-full blur-2xl pointer-events-none" />
                     <div className="absolute -bottom-12 -right-12 w-36 h-36 bg-sky-200/40 rounded-full blur-2xl pointer-events-none" />
-                    
-                    {/* Pola bintik samar (aesthetic dot grid) */}
-                    <div 
-                      className="absolute inset-0 opacity-[0.18] pointer-events-none" 
+
+                    <div
+                      className="absolute inset-0 opacity-[0.18] pointer-events-none"
                       style={{
                         backgroundImage: 'radial-gradient(#737373 1px, transparent 1px)',
                         backgroundSize: '16px 16px',
-                      }} 
+                      }}
                     />
 
                     <PolaroidSlider images={photoList} name={tpl.name} />
@@ -270,6 +290,9 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Floating Lo-Fi Music Player */}
+      <MusicPlayer />
     </main>
   );
 }
