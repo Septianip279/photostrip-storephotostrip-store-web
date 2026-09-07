@@ -120,15 +120,15 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-neutral-50 pb-20">
       {/* Minimalist Floating Navbar */}
-      <header className="sticky top-4 z-40 px-4 sm:px-6">
-        <nav className="max-w-4xl mx-auto bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-5 py-3 flex items-center justify-between transition-all">
+      <header className="sticky top-6 z-40 px-4 sm:px-6 mb-10">
+        <nav className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] rounded-full px-6 py-3.5 flex items-center justify-between transition-all">
           {/* Logo / Nama Brand */}
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-neutral-900 animate-pulse" />
-            <a href="#" className="font-semibold text-neutral-900 tracking-tight text-sm sm:text-base hover:opacity-80 transition">
-              Photostrip<span className="font-light text-neutral-400">Studio</span>
-            </a>
-          </div>
+          <a href="#" className="flex items-center gap-2.5 group">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
+            <span className="font-bold text-neutral-800 tracking-tight text-base sm:text-lg">
+              Photostrip<span className="font-normal text-neutral-400">Studio</span>
+            </span>
+          </a>
 
           {/* Menu / Tombol Aksi */}
           <div className="flex items-center gap-3">
@@ -136,7 +136,6 @@ export default function Home() {
               onClick={() => setIsCartOpen(true)}
               className="group relative flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition shadow-sm active:scale-95"
             >
-              {/* Ikon Tas / Keranjang Minimalis */}
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="w-4 h-4 transition-transform group-hover:scale-110" 
@@ -149,9 +148,8 @@ export default function Home() {
               </svg>
               <span>Keranjang</span>
 
-              {/* Badge Jumlah Item */}
               {totalItem > 0 && (
-                <span className="ml-0.5 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-4 text-center">
+                <span className="ml-0.5 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-4 text-center">
                   {totalItem}
                 </span>
               )}
