@@ -132,7 +132,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-neutral-50 pb-20">
       {/* Minimalist Floating Capsule Navbar */}
-      <header className="sticky top-6 z-40 px-4 sm:px-6 mb-8">
+      <header className="sticky top-6 z-40 px-4 sm:px-6 mb-6">
         <nav className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] rounded-full px-6 py-3.5 flex items-center justify-between transition-all">
           <a href="#" className="flex items-center gap-2.5 group">
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
@@ -166,11 +166,37 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* Katalog */}
-      <section className="max-w-5xl mx-auto p-6 md:p-10">
+      {/* MINIMALIST HERO / WELCOME SECTION */}
+      <section className="max-w-4xl mx-auto px-6 pt-10 pb-16 text-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-neutral-200/80 text-xs font-medium text-neutral-600 mb-6 shadow-xs">
+          <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+          <span>✨ Welcome to Photostrip Studio</span>
+        </div>
+        
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-neutral-900 tracking-tight leading-[1.15] mb-6">
+          Abadikan Momen Indah, <br />
+          <span className="font-serif italic font-normal text-neutral-700">Abadi dalam Genggaman.</span>
+        </h1>
+
+        <p className="text-neutral-500 text-sm sm:text-base max-w-lg mx-auto mb-8 font-normal leading-relaxed">
+          Pilih template photostrip estetik favoritmu, abadikan kenangan bersama orang tersayang, dan cetak dengan kualitas premium anti-pudar.
+        </p>
+
+        <div className="flex items-center justify-center gap-3">
+          <a
+            href="#catalog"
+            className="bg-neutral-900 hover:bg-neutral-800 text-white font-medium px-6 py-3 rounded-full text-xs sm:text-sm transition shadow-sm active:scale-95"
+          >
+            Mulai Pilih Desain ↓
+          </a>
+        </div>
+      </section>
+
+      {/* Katalog Utama */}
+      <section id="catalog" className="max-w-5xl mx-auto p-6 md:p-10 pt-4">
         <header className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-neutral-800 tracking-tight">Pilihan Template</h2>
-          <p className="text-neutral-500 mt-2 text-sm">Pilih desain dan ukuran yang kamu inginkan, lalu masukkan keranjang.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-neutral-800 tracking-tight">Katalog Pilihan Template</h2>
+          <p className="text-neutral-500 mt-1.5 text-xs sm:text-sm">Pilih tema dan ukuran yang kamu inginkan di bawah ini.</p>
         </header>
 
         {/* Tabs Filter Kategori */}
@@ -208,7 +234,7 @@ export default function Home() {
         )}
 
         {loading ? (
-          <p className="text-center text-neutral-500">Memuat katalog...</p>
+          <p className="text-center text-neutral-500 py-12 text-sm">Memuat katalog...</p>
         ) : filteredTemplates.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl border border-neutral-200/80">
             <p className="text-neutral-400 text-sm">Belum ada template untuk kategori ini.</p>
