@@ -40,7 +40,8 @@ export default function Home() {
   // State untuk Live Mockup Modal
   const [mockupOpen, setMockupOpen] = useState(false);
   const [selectedTemplateName, setSelectedTemplateName] = useState('');
-
+  const [selectedFrameUrl, setSelectedFrameUrl] = useState(''); 
+  
   const NO_WHATSAPP = '0895382019126';
 
   useEffect(() => {
@@ -254,15 +255,16 @@ export default function Home() {
 
                       {/* Tombol Coba Live Mockup */}
                       <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedTemplateName(tpl.name);
-                          setMockupOpen(true);
-                        }}
-                        className="inline-flex items-center gap-1.5 text-xs text-rose-600 hover:text-rose-700 font-medium mb-3 transition hover:underline"
-                      >
-                        <span>✨ Coba Pasang Foto Saya</span>
-                      </button>
+  type="button"
+  onClick={() => {
+    setSelectedTemplateName(tpl.name);
+    setSelectedFrameUrl(photoList[0] || ''); // <-- Mengambil foto frame pertama
+    setMockupOpen(true);
+  }}
+  className="inline-flex items-center gap-1.5 text-xs text-rose-600 hover:text-rose-700 font-medium mb-3 transition hover:underline"
+>
+  <span>✨ Coba Pasang Foto Saya</span>
+</button>
 
                       <p className="text-neutral-500 text-sm mb-6">{tpl.description}</p>
                     </div>
@@ -366,11 +368,12 @@ export default function Home() {
       )}
 
       {/* Live Mockup Modal */}
-      <MockupModal
-        isOpen={mockupOpen}
-        onClose={() => setMockupOpen(false)}
-        templateName={selectedTemplateName}
-      />
+<MockupModal
+  isOpen={mockupOpen}
+  onClose={() => setMockupOpen(false)}
+  templateName={selectedTemplateName}
+  frameUrl={selectedFrameUrl}
+/>
 
       {/* Floating Lo-Fi Music Player */}
       <MusicPlayer />

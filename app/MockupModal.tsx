@@ -6,9 +6,10 @@ interface MockupModalProps {
   isOpen: boolean;
   onClose: () => void;
   templateName: string;
+  frameUrl?: string;
 }
 
-export default function MockupModal({ isOpen, onClose, templateName }: MockupModalProps) {
+export default function MockupModal({ isOpen, onClose, templateName, frameUrl }: MockupModalProps) {
   const [userPhotos, setUserPhotos] = useState<string[]>([]);
   const [customText, setCustomText] = useState('Our Memories ✨');
 
@@ -29,45 +30,60 @@ export default function MockupModal({ isOpen, onClose, templateName }: MockupMod
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-neutral-100 flex flex-col md:flex-row gap-6 max-h-[90vh] overflow-y-auto">
-        {/* Kolom Kiri: Live Strip Polaroid Preview */}
+        
+        {/* Preview Frame */}
         <div className="flex-1 flex flex-col items-center justify-center bg-neutral-100/70 p-6 rounded-2xl border border-neutral-200/60">
-          <div className="bg-white p-3.5 pb-6 shadow-xl rounded-sm w-44 flex flex-col items-center gap-2.5 border border-neutral-200/40">
-            {/* Slot Foto 1 */}
-            <div className="w-full aspect-[4/3] bg-neutral-100 rounded-xs overflow-hidden flex items-center justify-center border border-neutral-200/50">
-              {userPhotos[0] ? (
-                <img src={userPhotos[0]} alt="slot 1" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-[10px] text-neutral-400 font-medium">Foto 1</span>
-              )}
-            </div>
+          <div className="relative w-48 shadow-2xl rounded-sm overflow-hidden bg-white border border-neutral-200/50">
+            
+            {/* Frame Desain Asli (Jika ada) */}
+            {frameUrl && (
+              <img
+                src={frameUrl}
+                alt="Template Frame"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none z-10 opacity-90 mix-blend-multiply"
+              />
+            )}
 
-            {/* Slot Foto 2 */}
-            <div className="w-full aspect-[4/3] bg-neutral-100 rounded-xs overflow-hidden flex items-center justify-center border border-neutral-200/50">
-              {userPhotos[1] ? (
-                <img src={userPhotos[1]} alt="slot 2" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-[10px] text-neutral-400 font-medium">Foto 2</span>
-              )}
-            </div>
+            {/* Konten Foto Pembeli */}
+            <div className="relative z-0 p-3 pb-6 flex flex-col items-center gap-2">
+              {/* Slot 1 */}
+              <div className="w-full aspect-[4/3] bg-neutral-200/70 rounded-xs overflow-hidden flex items-center justify-center">
+                {userPhotos[0] ? (
+                  <img src={userPhotos[0]} alt="slot 1" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[10px] text-neutral-400 font-medium">Foto 1</span>
+                )}
+              </div>
 
-            {/* Slot Foto 3 */}
-            <div className="w-full aspect-[4/3] bg-neutral-100 rounded-xs overflow-hidden flex items-center justify-center border border-neutral-200/50">
-              {userPhotos[2] ? (
-                <img src={userPhotos[2]} alt="slot 3" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-[10px] text-neutral-400 font-medium">Foto 3</span>
-              )}
-            </div>
+              {/* Slot 2 */}
+              <div className="w-full aspect-[4/3] bg-neutral-200/70 rounded-xs overflow-hidden flex items-center justify-center">
+                {userPhotos[1] ? (
+                  <img src={userPhotos[1]} alt="slot 2" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[10px] text-neutral-400 font-medium">Foto 2</span>
+                )}
+              </div>
 
-            {/* Custom Teks di Bawah Strip */}
-            <p className="text-[11px] text-neutral-700 font-serif italic text-center mt-1 truncate max-w-full px-1">
-              {customText || 'Tulis pesanmu...'}
-            </p>
+              {/* Slot 3 */}
+              <div className="w-full aspect-[4/3] bg-neutral-200/70 rounded-xs overflow-hidden flex items-center justify-center">
+                {userPhotos[2] ? (
+                  <img src={userPhotos[2]} alt="slot 3" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[10px] text-neutral-400 font-medium">Foto 3</span>
+                )}
+              </div>
+
+              {/* Custom Teks */}
+              <p className="text-[11px] text-neutral-800 font-serif italic text-center mt-1 truncate max-w-full px-1">
+                {customText || 'Tulis pesanmu...'}
+              </p>
+            </div>
           </div>
+
           <span className="text-[10px] text-neutral-400 mt-3 font-medium">Simulasi Photostrip 2x6</span>
         </div>
 
-        {/* Kolom Kanan: Kontrol Upload & Teks */}
+        {/* Form Kontrol */}
         <div className="flex-1 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-start mb-4">
@@ -84,11 +100,10 @@ export default function MockupModal({ isOpen, onClose, templateName }: MockupMod
             </div>
 
             <p className="text-xs text-neutral-500 mb-5 leading-relaxed">
-              Coba masukkan sampai 3 foto dari galerimu untuk melihat gambaran hasil cetak polaroid.
+              Pilih 3 foto dari perangkatmu untuk disimulasikan ke dalam template ini.
             </p>
 
             <div className="space-y-4">
-              {/* Input Foto */}
               <div>
                 <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                   Pilih 3 Foto
@@ -102,7 +117,6 @@ export default function MockupModal({ isOpen, onClose, templateName }: MockupMod
                 />
               </div>
 
-              {/* Input Custom Pesan */}
               <div>
                 <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
                   Tulisan Bawah Foto (Opsional)
@@ -136,6 +150,7 @@ export default function MockupModal({ isOpen, onClose, templateName }: MockupMod
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );
