@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { supabase } from './supabaseClient';
 import PolaroidSlider from './PolaroidSlider';
 import MusicPlayer from './MusicPlayer';
+import MockupModal from './MockupModal';
 
 interface Variant {
   id: number;
@@ -35,6 +36,10 @@ export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('Semua');
+
+  // State untuk Live Mockup Modal
+  const [mockupOpen, setMockupOpen] = useState(false);
+  const [selectedTemplateName, setSelectedTemplateName] = useState('');
 
   const NO_WHATSAPP = '0895382019126';
 
@@ -246,7 +251,20 @@ export default function Home() {
                           {tpl.category || 'Minimalist'}
                         </span>
                       </div>
-                      <p className="text-neutral-500 text-sm mt-1 mb-6">{tpl.description}</p>
+
+                      {/* Tombol Coba Live Mockup */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedTemplateName(tpl.name);
+                          setMockupOpen(true);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs text-rose-600 hover:text-rose-700 font-medium mb-3 transition hover:underline"
+                      >
+                        <span>✨ Coba Pasang Foto Saya</span>
+                      </button>
+
+                      <p className="text-neutral-500 text-sm mb-6">{tpl.description}</p>
                     </div>
 
                     <div className="border-t border-neutral-100 pt-4">
@@ -346,6 +364,13 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Live Mockup Modal */}
+      <MockupModal
+        isOpen={mockupOpen}
+        onClose={() => setMockupOpen(false)}
+        templateName={selectedTemplateName}
+      />
 
       {/* Floating Lo-Fi Music Player */}
       <MusicPlayer />
