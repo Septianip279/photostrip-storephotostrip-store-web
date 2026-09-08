@@ -13,14 +13,24 @@ interface Variant {
 interface Template {
   id: number;
   name: string;
+  category?: string;
   image_url: string;
   description: string;
   template_variants: Variant[];
 }
 
+const CATEGORY_OPTIONS = [
+  'Minimalist',
+  'Vintage',
+  'Y2K / Retro',
+  'Couple & Love',
+  'Birthday',
+];
+
 export default function AdminPage() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [name, setName] = useState('');
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
   const [files, setFiles] = useState<File[]>([]);
   const [description, setDescription] = useState('');
   const [price2x6, setPrice2x6] = useState('15000');
@@ -28,15 +38,13 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  // State untuk Pengaturan Musik
+  // State Pengaturan Musik
   const [musicUrl, setMusicUrl] = useState('');
   const [musicTitle, setMusicTitle] = useState('');
   const [savingMusic, setSavingMusic] = useState(false);
   const [musicMessage, setMusicMessage] = useState('');
 
-  // Ambil daftar template & pengaturan musik
   const fetchData = async () => {
-    // Ambil templates
     const { data: tplData } = await supabase
       .from('templates')
       .select('*, template_variants(*)')
@@ -44,7 +52,6 @@ export default function AdminPage() {
 
     if (tplData) setTemplates(tplData as Template[]);
 
-    // Ambil pengaturan musik
     const { data: settingsData } = await supabase
       .from('site_settings')
       .select('*');
@@ -61,7 +68,6 @@ export default function AdminPage() {
     fetchData();
   }, []);
 
-  // Simpan Pengaturan Musik
   const handleSaveMusic = async (e: React.FormEvent) => {
     e.preventDefault();
     setSavingMusic(true);
@@ -98,7 +104,7 @@ export default function AdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (files.length === 0) {
-      setMessage('Silakan pilih minimal 1 foto polaroid!');
+      setMessage('Silakan pilih minimal satu foto polaroid.');
       return;
     }
 
@@ -128,9 +134,10 @@ export default function AdminPage() {
 
       const combinedImageUrl = uploadedUrls.join(',');
 
+      // Simpan template beserta kategorinya
       const { data: templateData, error: templateError } = await supabase
         .from('templates')
-        .insert([{ name, image_url: combinedImageUrl, description }])
+        .insert([{ name, category, image_url: combinedImageUrl, description }])
         .select()
         .single();
 
@@ -155,8 +162,9 @@ export default function AdminPage() {
 
       if (variantError) throw variantError;
 
-      setMessage(`Berhasil! Template dan ${files.length} foto sukses disimpan.`);
+      setMessage(`Berhasil! Template kategori "${category}" sukses disimpan.`);
       setName('');
+      setCategory(CATEGORY_OPTIONS[0]);
       setFiles([]);
       setDescription('');
       fetchData();
@@ -224,7 +232,7 @@ export default function AdminPage() {
                   type="text"
                   value={musicTitle}
                   onChange={(e) => setMusicTitle(e.target.value)}
-                  placeholder="Contoh: What If I Call"
+                  placeholder="Contoh: About You"
                   className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800"
                   required
                 />
@@ -238,7 +246,7 @@ export default function AdminPage() {
                   type="text"
                   value={musicUrl}
                   onChange={(e) => setMusicUrl(e.target.value)}
-                  placeholder="https://music.youtube.com/watch?v=F2PsSZKweTc"
+                  placeholder="https://music.youtube.com/watch?v=..."
                   className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800"
                   required
                 />
@@ -267,27 +275,46 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Form Tambah Template */}
+        {/* Form Tambah Template Baru */}
         <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-neutral-200">
           <h2 className="text-lg font-bold text-neutral-800 mb-4">Tambah Desain Baru</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-neutral-600 uppercase mb-1">
-                Nama Template
-              </label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Contoh: Sweet Valentine"
-                className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-600 uppercase mb-1">
+                  Nama Template
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Contoh: Sweet Valentine"
+                  className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-neutral-600 uppercase mb-1">
+                  Kategori Tema
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:outline-neutral-800 bg-white"
+                >
+                  {CATEGORY_OPTIONS.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-neutral-600 uppercase mb-1">
-                Upload Foto Polaroid (Bisa pilih sekaligus banyak)
+                Upload Foto Polaroid (Bisa pilih beberapa sekaligus)
               </label>
               <input
                 type="file"
@@ -401,12 +428,17 @@ export default function AdminPage() {
                         )}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-neutral-800">{tpl.name}</h3>
-                        <p className="text-xs text-neutral-500 line-clamp-1">{tpl.description || 'Tidak ada deskripsi'}</p>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-neutral-800">{tpl.name}</h3>
+                          <span className="text-[10px] uppercase font-bold bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded-full">
+                            {tpl.category || 'Minimalist'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-neutral-500 line-clamp-1 mt-0.5">{tpl.description || 'Tidak ada deskripsi'}</p>
                         <p className="text-[11px] text-neutral-400 mt-0.5">Total {previewImages.length} foto polaroid</p>
                         <div className="flex gap-2 mt-1">
                           {tpl.template_variants?.map((v) => (
-                            <span key={v.id} className="text-xs bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded">
+                            <span key={v.id} className="text-xs bg-neutral-50 border border-neutral-200 text-neutral-600 px-2 py-0.5 rounded">
                               {v.size_name}: Rp{v.price.toLocaleString('id-ID')}
                             </span>
                           ))}

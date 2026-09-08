@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { supabase } from './supabaseClient';
 import PolaroidSlider from './PolaroidSlider';
 import MusicPlayer from './MusicPlayer';
@@ -14,6 +14,7 @@ interface Variant {
 interface Template {
   id: number;
   name: string;
+  category?: string;
   image_url: string;
   description: string;
   template_variants: Variant[];
@@ -33,8 +34,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('Semua');
 
-  // Nomor WhatsApp tujuan checkout
   const NO_WHATSAPP = '0895382019126';
 
   useEffect(() => {
@@ -54,7 +55,21 @@ export default function Home() {
     fetchTemplates();
   }, []);
 
-  // Menambahkan item ke keranjang
+  // Daftar kategori dinamis yang diambil dari template yang ada
+  const categories = useMemo(() => {
+    const list = new Set<string>();
+    templates.forEach((tpl) => {
+      if (tpl.category) list.add(tpl.category);
+    });
+    return ['Semua', ...Array.from(list)];
+  }, [templates]);
+
+  // Filter template berdasarkan tab yang aktif
+  const filteredTemplates = useMemo(() => {
+    if (activeCategory === 'Semua') return templates;
+    return templates.filter((tpl) => (tpl.category || 'Minimalist') === activeCategory);
+  }, [templates, activeCategory]);
+
   const addToCart = (tpl: Template, variant: Variant) => {
     setCart((prevCart) => {
       const existingIndex = prevCart.findIndex(
@@ -82,7 +97,6 @@ export default function Home() {
     setIsCartOpen(true);
   };
 
-  // Mengubah jumlah item di keranjang
   const updateQuantity = (templateId: number, variantId: number, delta: number) => {
     setCart((prevCart) =>
       prevCart
@@ -100,7 +114,6 @@ export default function Home() {
   const totalBelanja = cart.reduce((total, item) => total + item.price * item.quantity, 0);
   const totalItem = cart.reduce((total, item) => total + item.quantity, 0);
 
-  // Logika Checkout WhatsApp
   const handleCheckoutWA = () => {
     if (cart.length === 0) return;
 
@@ -121,7 +134,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-neutral-50 pb-20">
       {/* Minimalist Floating Capsule Navbar */}
-      <header className="sticky top-6 z-40 px-4 sm:px-6 mb-10">
+      <header className="sticky top-6 z-40 px-4 sm:px-6 mb-8">
         <nav className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] rounded-full px-6 py-3.5 flex items-center justify-between transition-all">
           <a href="#" className="flex items-center gap-2.5 group">
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
@@ -157,16 +170,54 @@ export default function Home() {
 
       {/* Katalog */}
       <section className="max-w-5xl mx-auto p-6 md:p-10">
-        <header className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-neutral-800">Pilihan Template</h2>
-          <p className="text-neutral-500 mt-2">Pilih desain dan ukuran yang kamu inginkan, lalu masukkan keranjang.</p>
+        <header className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-neutral-800 tracking-tight">Pilihan Template</h2>
+          <p className="text-neutral-500 mt-2 text-sm">Pilih desain dan ukuran yang kamu inginkan, lalu masukkan keranjang.</p>
         </header>
+
+        {/* Tabs Filter Kategori Minimalis */}
+        {!loading && categories.length > 1 && (
+          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat;
+              const count =
+                cat === 'Semua'
+                  ? templates.length
+                  : templates.filter((t) => (t.category || 'Minimalist') === cat).length;
+
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all shrink-0 active:scale-95 ${
+                    isActive
+                      ? 'bg-neutral-900 text-white shadow-md'
+                      : 'bg-white text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 border border-neutral-200/80'
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
+                      isActive ? 'bg-neutral-800 text-neutral-300' : 'bg-neutral-100 text-neutral-500'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {loading ? (
           <p className="text-center text-neutral-500">Memuat katalog...</p>
+        ) : filteredTemplates.length === 0 ? (
+          <div className="text-center py-16 bg-white rounded-3xl border border-neutral-200/80">
+            <p className="text-neutral-400 text-sm">Belum ada template untuk kategori ini.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {templates.map((tpl) => {
+            {filteredTemplates.map((tpl) => {
               const photoList = tpl.image_url ? tpl.image_url.split(',') : [];
 
               return (
@@ -189,7 +240,12 @@ export default function Home() {
 
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold text-neutral-800">{tpl.name}</h3>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <h3 className="text-xl font-semibold text-neutral-800">{tpl.name}</h3>
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 text-neutral-600 px-2.5 py-0.5 rounded-full border border-neutral-200/60">
+                          {tpl.category || 'Minimalist'}
+                        </span>
+                      </div>
                       <p className="text-neutral-500 text-sm mt-1 mb-6">{tpl.description}</p>
                     </div>
 
