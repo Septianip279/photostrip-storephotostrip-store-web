@@ -2,15 +2,15 @@
 
 import Link from 'next/link';
 import MusicPlayer from './MusicPlayer';
-// Pastikan path import ini sesuai dengan foldermu
 import SplashCursor from '@/components/SplashCursor'; 
 import Aurora from '@/components/Aurora'; 
+import BorderGlow from '@/components/BorderGlow'; // <-- Import komponen BorderGlow
 
 export default function WelcomePage() {
   return (
     <main className="relative min-h-screen w-full bg-white flex flex-col justify-between px-6 pt-6 pb-4 md:px-12 md:pt-8 select-none antialiased overflow-hidden">
       
-      {/* LAPIS 1: Animasi Aurora (Sesuai setingan React Bits) */}
+      {/* LAPIS 1: Animasi Aurora */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
         <Aurora
           colorStops={["#6d28d9", "#ec4899", "#EAB308"]} 
@@ -21,7 +21,7 @@ export default function WelcomePage() {
         />
       </div>
 
-      {/* LAPIS 2: Efek Splash Cursor (Tinta mengikuti kursor mouse) */}
+      {/* LAPIS 2: Efek Splash Cursor */}
       <div className="absolute inset-0 z-10 opacity-70 mix-blend-multiply">
         <SplashCursor
           SIM_RESOLUTION={128}
@@ -73,14 +73,27 @@ export default function WelcomePage() {
           orang tersayang, dan cetak dengan kualitas premium anti-pudar.
         </p>
 
-        <div className="my-2 pointer-events-auto">
-          <Link
-            href="/catalog"
-            className="group inline-flex items-center gap-2.5 bg-neutral-950 hover:bg-neutral-800 text-white font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all shadow-sm hover:shadow-md active:scale-95"
+        {/* Tombol CTA dengan BorderGlow */}
+        <div className="my-2 pointer-events-auto inline-block">
+          <BorderGlow
+            edgeSensitivity={40}
+            glowColor="40 80 80"
+            backgroundColor="#0a0a0a"
+            borderRadius={9999} // Membuat bentuknya lonjong kapsul sempurna
+            glowRadius={30}
+            glowIntensity={1.2}
+            coneSpread={25}
+            colors={['#c084fc', '#f472b6', '#38bdf8']}
+            fillOpacity={0.4}
           >
-            <span>Mulai Pilih Desain</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
+            <Link
+              href="/catalog"
+              className="group inline-flex items-center gap-2.5 text-white font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all active:scale-95"
+            >
+              <span>Mulai Pilih Desain</span>
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </Link>
+          </BorderGlow>
         </div>
 
         {/* 3. Kartu Photostrip Fan Deck */}
