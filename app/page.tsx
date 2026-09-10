@@ -5,9 +5,9 @@ import MusicPlayer from './MusicPlayer';
 
 export default function WelcomePage() {
   return (
-    <main className="min-h-screen w-full bg-[#faf9f6] flex flex-col justify-between px-6 py-6 md:px-12 md:py-8 select-none antialiased overflow-x-hidden">
-      {/* 1. Header Minimalis */}
-      <header className="w-full max-w-5xl mx-auto flex items-center justify-between">
+    <main className="relative min-h-screen w-full bg-white flex flex-col justify-between px-6 pt-6 pb-4 md:px-12 md:pt-8 select-none antialiased overflow-hidden">
+      {/* 1. Header */}
+      <header className="w-full max-w-5xl mx-auto flex items-center justify-between z-20">
         <div className="flex items-center gap-2.5">
           <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
           <span className="font-bold text-neutral-900 tracking-tight text-base sm:text-lg">
@@ -24,16 +24,16 @@ export default function WelcomePage() {
         </Link>
       </header>
 
-      {/* 2. Hero Section Center dengan Visual Floating Polaroid Cards */}
-      <section className="w-full max-w-4xl mx-auto text-center flex flex-col items-center my-auto py-4">
+      {/* 2. Area Konten Utama (Proporsional & Seimbang) */}
+      <section className="w-full max-w-2xl mx-auto text-center flex flex-col items-center z-10 my-auto pt-4">
         {/* Badge Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-neutral-200/80 text-[11px] font-medium text-neutral-600 mb-5 shadow-xs">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-neutral-200/90 text-[11px] font-medium text-neutral-600 mb-4 shadow-xs">
           <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
           <span>✨ Welcome to Photostrip Studio</span>
         </div>
 
         {/* Heading */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight leading-tight mb-3">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-neutral-900 tracking-tight leading-[1.12] mb-3">
           Abadikan Momen Indah, <br />
           <span className="font-serif italic font-normal text-neutral-600">
             Abadi dalam Genggaman.
@@ -41,76 +41,55 @@ export default function WelcomePage() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-neutral-500 text-xs sm:text-sm max-w-md mx-auto leading-relaxed mb-6">
+        <p className="text-neutral-500 text-xs sm:text-[13px] max-w-md mx-auto leading-relaxed mb-5">
           Pilih template photostrip estetik favoritmu, abadikan kenangan bersama
           orang tersayang, dan cetak dengan kualitas premium anti-pudar.
         </p>
 
-        {/* Button CTA */}
-        <Link
-          href="/catalog"
-          className="group inline-flex items-center gap-2.5 bg-neutral-900 hover:bg-neutral-800 text-white font-medium px-7 py-3 rounded-full text-xs sm:text-sm transition-all shadow-sm hover:shadow-md active:scale-95 mb-8"
-        >
-          <span>Mulai Pilih Desain</span>
-          <span className="transition-transform group-hover:translate-x-1">→</span>
-        </Link>
+        {/* Tombol CTA (Posisi Center Seimbang Atas & Bawah) */}
+        <div className="my-2">
+          <Link
+            href="/catalog"
+            className="group inline-flex items-center gap-2.5 bg-neutral-950 hover:bg-neutral-800 text-white font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all shadow-sm hover:shadow-md active:scale-95"
+          >
+            <span>Mulai Pilih Desain</span>
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </Link>
+        </div>
 
-        {/* VISUAL PREVIEW FLOATING POLAROID CARDS (Tiga Kartu Estetik) */}
-        <div className="relative h-44 sm:h-52 w-full max-w-md flex items-center justify-center pointer-events-none mt-2">
-          
-          {/* Kartu Kiri (Miring ke Kiri) */}
-          <div className="pointer-events-auto absolute -translate-x-16 sm:-translate-x-20 -rotate-8 hover:-rotate-3 hover:-translate-y-2 hover:z-20 transition-all duration-300 w-24 sm:w-28 bg-white p-2 pb-4 rounded-md shadow-[0_10px_25px_rgba(0,0,0,0.08)] border border-neutral-200/70">
+        {/* 3. Kartu Photostrip Fan Deck (Diberi Jarak Lega dari Tombol) */}
+        <div className="relative w-72 sm:w-80 h-36 sm:h-40 flex justify-center items-start pointer-events-none mt-7 sm:mt-8">
+          {/* Kartu Kiri (Pastel Kuning) */}
+          <div className="pointer-events-auto absolute -translate-x-16 sm:-translate-x-20 -rotate-8 hover:-rotate-3 hover:-translate-y-2 transition-all duration-300 w-24 sm:w-28 bg-white p-2 pb-6 rounded-t-lg shadow-[0_12px_28px_rgba(0,0,0,0.08)] border border-neutral-200/90">
             <div className="flex flex-col gap-1.5">
-              <div className="w-full aspect-[4/3] bg-amber-100/70 rounded-xs flex items-center justify-center">
-                <span className="text-[10px]">☕</span>
-              </div>
-              <div className="w-full aspect-[4/3] bg-rose-100/70 rounded-xs flex items-center justify-center">
-                <span className="text-[10px]">🌷</span>
-              </div>
-              <div className="w-full aspect-[4/3] bg-sky-100/70 rounded-xs flex items-center justify-center">
-                <span className="text-[10px]">🌊</span>
-              </div>
-              <span className="text-[8px] text-neutral-400 font-serif italic text-center mt-0.5">vintage vibes</span>
+              <div className="w-full aspect-[4/3] bg-amber-50 rounded-xs flex items-center justify-center text-[10px]">☕</div>
+              <div className="w-full aspect-[4/3] bg-amber-100/70 rounded-xs flex items-center justify-center text-[10px]">🌷</div>
+              <div className="w-full aspect-[4/3] bg-amber-50 rounded-xs flex items-center justify-center text-[10px]">🌊</div>
             </div>
           </div>
 
-          {/* Kartu Tengah (Lurus, Utama, Sedikit Menonjol) */}
-          <div className="pointer-events-auto relative z-10 hover:-translate-y-2 hover:scale-105 transition-all duration-300 w-26 sm:w-30 bg-white p-2.5 pb-4 rounded-md shadow-[0_14px_30px_rgba(0,0,0,0.12)] border border-neutral-200/80">
+          {/* Kartu Kanan (Pastel Hijau/Mint) */}
+          <div className="pointer-events-auto absolute translate-x-16 sm:translate-x-20 rotate-8 hover:rotate-3 hover:-translate-y-2 transition-all duration-300 w-24 sm:w-28 bg-white p-2 pb-6 rounded-t-lg shadow-[0_12px_28px_rgba(0,0,0,0.08)] border border-neutral-200/90">
             <div className="flex flex-col gap-1.5">
-              <div className="w-full aspect-[4/3] bg-gradient-to-br from-pink-100 to-rose-200 rounded-xs flex items-center justify-center">
-                <span className="text-[11px]">✨</span>
-              </div>
-              <div className="w-full aspect-[4/3] bg-gradient-to-br from-amber-100 to-orange-100 rounded-xs flex items-center justify-center">
-                <span className="text-[11px]">📸</span>
-              </div>
-              <div className="w-full aspect-[4/3] bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xs flex items-center justify-center">
-                <span className="text-[11px]">🤍</span>
-              </div>
-              <span className="text-[8px] text-neutral-700 font-serif italic text-center mt-0.5">our memories</span>
+              <div className="w-full aspect-[4/3] bg-emerald-50 rounded-xs flex items-center justify-center text-[10px]">🌿</div>
+              <div className="w-full aspect-[4/3] bg-emerald-100/70 rounded-xs flex items-center justify-center text-[10px]">🪐</div>
+              <div className="w-full aspect-[4/3] bg-emerald-50 rounded-xs flex items-center justify-center text-[10px]">🌻</div>
             </div>
           </div>
 
-          {/* Kartu Kanan (Miring ke Kanan) */}
-          <div className="pointer-events-auto absolute translate-x-16 sm:translate-x-20 rotate-8 hover:rotate-3 hover:-translate-y-2 hover:z-20 transition-all duration-300 w-24 sm:w-28 bg-white p-2 pb-4 rounded-md shadow-[0_10px_25px_rgba(0,0,0,0.08)] border border-neutral-200/70">
+          {/* Kartu Tengah (Pastel Pink) */}
+          <div className="pointer-events-auto relative z-10 hover:-translate-y-2 transition-all duration-300 w-28 sm:w-32 bg-white p-2.5 pb-8 rounded-t-lg shadow-[0_16px_34px_rgba(0,0,0,0.12)] border border-neutral-200/90">
             <div className="flex flex-col gap-1.5">
-              <div className="w-full aspect-[4/3] bg-emerald-100/70 rounded-xs flex items-center justify-center">
-                <span className="text-[10px]">🌿</span>
-              </div>
-              <div className="w-full aspect-[4/3] bg-purple-100/70 rounded-xs flex items-center justify-center">
-                <span className="text-[10px]">🪐</span>
-              </div>
-              <div className="w-full aspect-[4/3] bg-yellow-100/70 rounded-xs flex items-center justify-center">
-                <span className="text-[10px]">🌻</span>
-              </div>
-              <span className="text-[8px] text-neutral-400 font-serif italic text-center mt-0.5">best day</span>
+              <div className="w-full aspect-[4/3] bg-rose-50 rounded-xs flex items-center justify-center text-[11px]">✨</div>
+              <div className="w-full aspect-[4/3] bg-rose-100/80 rounded-xs flex items-center justify-center text-[11px]">📸</div>
+              <div className="w-full aspect-[4/3] bg-rose-50 rounded-xs flex items-center justify-center text-[11px]">🤍</div>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* 3. Footer Minimalis */}
-      <footer className="w-full max-w-5xl mx-auto text-center text-[11px] text-neutral-400">
+      {/* 4. Footer */}
+      <footer className="w-full max-w-5xl mx-auto text-center text-[11px] text-neutral-400 z-20 pb-1">
         © {new Date().getFullYear()} Photostrip Studio. All rights reserved.
       </footer>
 
