@@ -2,27 +2,42 @@
 
 import Link from 'next/link';
 import MusicPlayer from './MusicPlayer';
-// Pastikan path ini sesuai dengan folder tempat Aurora terinstal
+// Pastikan path import ini sesuai dengan foldermu
+import SplashCursor from '@/components/SplashCursor'; 
 import Aurora from '@/components/Aurora'; 
 
 export default function WelcomePage() {
   return (
     <main className="relative min-h-screen w-full bg-white flex flex-col justify-between px-6 pt-6 pb-4 md:px-12 md:pt-8 select-none antialiased overflow-hidden">
       
-      {/* Latar Belakang Animasi Aurora */}
+      {/* LAPIS 1: Animasi Aurora (Gradasi Pastel di Paling Belakang) */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
         <Aurora
-          // Menggunakan warna pastel estetik: Pink, Kuning Lembut, dan Biru Muda
           colorStops={["#fbcfe8", "#fde68a", "#bae6fd"]} 
           blend={0.8}
           amplitude={1.0}
-          speed={0.8} // Dibuat sedikit lebih lambat agar terasa lebih kalem
+          speed={0.8}
           lightMode
         />
       </div>
 
+      {/* LAPIS 2: Efek Splash Cursor (Tinta mengikuti kursor mouse) */}
+      <div className="absolute inset-0 z-10 opacity-70 mix-blend-multiply">
+        <SplashCursor
+          SIM_RESOLUTION={128}
+          DYE_RESOLUTION={1440}
+          DENSITY_DISSIPATION={3.5}
+          VELOCITY_DISSIPATION={2}
+          PRESSURE={0.1}
+          CURL={3}
+          SPLAT_RADIUS={0.2}
+          SPLAT_FORCE={6000}
+          COLOR_UPDATE_SPEED={10}
+        />
+      </div>
+
       {/* 1. Header */}
-      <header className="relative w-full max-w-5xl mx-auto flex items-center justify-between z-20">
+      <header className="relative w-full max-w-5xl mx-auto flex items-center justify-between z-30">
         <div className="flex items-center gap-2.5">
           <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
           <span className="font-bold text-neutral-900 tracking-tight text-base sm:text-lg pointer-events-auto">
@@ -40,14 +55,12 @@ export default function WelcomePage() {
       </header>
 
       {/* 2. Area Konten Utama */}
-      <section className="relative w-full max-w-4xl mx-auto text-center flex flex-col items-center z-10 my-auto pt-4 pointer-events-none">
-        {/* Badge Pill */}
+      <section className="relative w-full max-w-4xl mx-auto text-center flex flex-col items-center z-20 my-auto pt-4 pointer-events-none">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/60 backdrop-blur-md border border-neutral-200/50 text-[11px] font-medium text-neutral-600 mb-4 shadow-xs">
           <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
           <span>✨ Welcome to Photostrip Studio</span>
         </div>
 
-        {/* Heading */}
         <h1 className="text-3xl sm:text-5xl md:text-[54px] font-bold text-neutral-900 tracking-tight leading-[1.15] mb-3 drop-shadow-sm">
           Abadikan Momen Indah, <br />
           <span className="font-serif italic font-normal text-neutral-600 whitespace-nowrap">
@@ -55,13 +68,11 @@ export default function WelcomePage() {
           </span>
         </h1>
 
-        {/* Subtitle */}
         <p className="text-neutral-600 text-xs sm:text-[13px] max-w-md mx-auto leading-relaxed mb-5 drop-shadow-sm">
           Pilih template photostrip estetik favoritmu, abadikan kenangan bersama
           orang tersayang, dan cetak dengan kualitas premium anti-pudar.
         </p>
 
-        {/* Tombol CTA */}
         <div className="my-2 pointer-events-auto">
           <Link
             href="/catalog"
@@ -101,12 +112,12 @@ export default function WelcomePage() {
       </section>
 
       {/* 4. Footer */}
-      <footer className="relative w-full max-w-5xl mx-auto text-center text-[11px] text-neutral-400 z-20 pb-1 pointer-events-none">
+      <footer className="relative w-full max-w-5xl mx-auto text-center text-[11px] text-neutral-400 z-30 pb-1 pointer-events-none">
         © {new Date().getFullYear()} Photostrip Studio. All rights reserved.
       </footer>
 
       {/* Player Musik Latar */}
-      <div className="pointer-events-auto relative z-30">
+      <div className="pointer-events-auto relative z-40">
         <MusicPlayer />
       </div>
     </main>
