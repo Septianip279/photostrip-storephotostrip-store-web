@@ -10,13 +10,13 @@ export default function WelcomePage() {
   return (
     <main className="relative min-h-screen w-full bg-white flex flex-col justify-between px-6 pt-6 pb-4 md:px-12 md:pt-8 select-none antialiased overflow-hidden">
       
-      {/* LAPIS 1: Animasi Aurora (Gradasi Pastel di Paling Belakang) */}
+      {/* LAPIS 1: Animasi Aurora (Sesuai setingan React Bits) */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
         <Aurora
-          colorStops={["#fbcfe8", "#fde68a", "#bae6fd"]} 
-          blend={0.8}
+          colorStops={["#6d28d9", "#ec4899", "#EAB308"]} 
+          blend={0.66}
           amplitude={1.0}
-          speed={0.8}
+          speed={1.3}
           lightMode
         />
       </div>
