@@ -9,7 +9,7 @@ export default function WelcomePage() {
   return (
     <main className="relative min-h-screen w-full bg-white flex flex-col justify-between px-6 pt-6 pb-4 md:px-12 md:pt-8 select-none antialiased overflow-hidden">
       
-      {/* Tombol CTA dengan BorderGlow (Latar Putih, Teks Hitam) */}
+      {/* Tombol CTA dengan BorderGlow (Putih & Hitam) */}
         <div className="my-2 pointer-events-auto inline-block">
           <BorderGlow
             edgeSensitivity={40}
@@ -20,11 +20,11 @@ export default function WelcomePage() {
             glowIntensity={1.0}
             coneSpread={25}
             colors={['#c084fc', '#f472b6', '#38bdf8']}
-            fillOpacity={0.3}
+            fillOpacity={0.2}
           >
             <Link
               href="/catalog"
-              className="group inline-flex items-center gap-2.5 text-neutral-900 font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all active:scale-95 shadow-xs"
+              className="group inline-flex items-center gap-2.5 text-neutral-900 font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all active:scale-95"
             >
               <span>Mulai Pilih Desain</span>
               <span className="transition-transform group-hover:translate-x-1">→</span>
