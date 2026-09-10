@@ -24,18 +24,18 @@ export default function WelcomePage() {
         </Link>
       </header>
 
-      {/* 2. Area Konten Utama (Proporsional & Seimbang) */}
-      <section className="w-full max-w-2xl mx-auto text-center flex flex-col items-center z-10 my-auto pt-4">
+      {/* 2. Area Konten Utama */}
+      <section className="w-full max-w-4xl mx-auto text-center flex flex-col items-center z-10 my-auto pt-4">
         {/* Badge Pill */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-neutral-200/90 text-[11px] font-medium text-neutral-600 mb-4 shadow-xs">
           <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
           <span>✨ Welcome to Photostrip Studio</span>
         </div>
 
-        {/* Heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-neutral-900 tracking-tight leading-[1.12] mb-3">
+        {/* Heading: Dikunci 1 Baris untuk Kalimat Kedua */}
+        <h1 className="text-3xl sm:text-5xl md:text-[54px] font-bold text-neutral-900 tracking-tight leading-[1.15] mb-3">
           Abadikan Momen Indah, <br />
-          <span className="font-serif italic font-normal text-neutral-600">
+          <span className="font-serif italic font-normal text-neutral-600 whitespace-nowrap">
             Abadi dalam Genggaman.
           </span>
         </h1>
@@ -46,7 +46,7 @@ export default function WelcomePage() {
           orang tersayang, dan cetak dengan kualitas premium anti-pudar.
         </p>
 
-        {/* Tombol CTA (Posisi Center Seimbang Atas & Bawah) */}
+        {/* Tombol CTA Center Seimbang */}
         <div className="my-2">
           <Link
             href="/catalog"
@@ -57,7 +57,7 @@ export default function WelcomePage() {
           </Link>
         </div>
 
-        {/* 3. Kartu Photostrip Fan Deck (Diberi Jarak Lega dari Tombol) */}
+        {/* 3. Kartu Photostrip Fan Deck */}
         <div className="relative w-72 sm:w-80 h-36 sm:h-40 flex justify-center items-start pointer-events-none mt-7 sm:mt-8">
           {/* Kartu Kiri (Pastel Kuning) */}
           <div className="pointer-events-auto absolute -translate-x-16 sm:-translate-x-20 -rotate-8 hover:-rotate-3 hover:-translate-y-2 transition-all duration-300 w-24 sm:w-28 bg-white p-2 pb-6 rounded-t-lg shadow-[0_12px_28px_rgba(0,0,0,0.08)] border border-neutral-200/90">
