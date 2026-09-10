@@ -14,7 +14,7 @@ export default function WelcomePage() {
           <BorderGlow
             edgeSensitivity={40}
             glowColor="40 80 80"
-            backgroundColor="#ffffff" // Mengubah background card menjadi putih
+            backgroundColor="#ffffff"
             borderRadius={9999}
             glowRadius={25}
             glowIntensity={1.0}
@@ -24,7 +24,7 @@ export default function WelcomePage() {
           >
             <Link
               href="/catalog"
-              className="group inline-flex items-center gap-2.5 text-neutral-900 font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all active:scale-95"
+              className="group inline-flex items-center gap-2.5 text-neutral-900 font-medium px-8 py-3 rounded-full text-xs sm:text-sm transition-all active:scale-95 shadow-xs"
             >
               <span>Mulai Pilih Desain</span>
               <span className="transition-transform group-hover:translate-x-1">→</span>
