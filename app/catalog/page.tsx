@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { supabase } from '../supabaseClient';
 import PolaroidSlider from '../PolaroidSlider';
 import MusicPlayer from '../MusicPlayer';
+// Sesuaikan import path ini seperti di halaman depan
+import SplashCursor from '@/components/SplashCursor'; 
 
 interface Variant {
   id: number;
@@ -131,10 +133,26 @@ export default function CatalogPage() {
   };
 
   return (
-    <main className="min-h-screen bg-neutral-50 pb-20">
+    <main className="relative min-h-screen bg-neutral-50 pb-20">
+      
+      {/* Efek Splash Cursor (Fixed di background agar tidak hilang saat scroll) */}
+      <div className="fixed inset-0 z-0 opacity-60 mix-blend-multiply pointer-events-none">
+        <SplashCursor
+          SIM_RESOLUTION={128}
+          DYE_RESOLUTION={1440}
+          DENSITY_DISSIPATION={3.5}
+          VELOCITY_DISSIPATION={2}
+          PRESSURE={0.1}
+          CURL={3}
+          SPLAT_RADIUS={0.2}
+          SPLAT_FORCE={6000}
+          COLOR_UPDATE_SPEED={10}
+        />
+      </div>
+
       {/* Floating Capsule Navbar */}
       <header className="sticky top-6 z-40 px-4 sm:px-6 mb-6">
-        <nav className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] rounded-full px-6 py-3.5 flex items-center justify-between transition-all">
+        <nav className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] rounded-full px-6 py-3.5 flex items-center justify-between transition-all pointer-events-auto">
           <Link href="/" className="flex items-center gap-2.5 group">
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
             <span className="font-bold text-neutral-800 tracking-tight text-base sm:text-lg">
@@ -145,7 +163,7 @@ export default function CatalogPage() {
           <button
             type="button"
             onClick={() => setIsCartOpen(true)}
-            className="group relative flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition shadow-sm active:scale-95"
+            className="group relative flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition shadow-sm active:scale-95 pointer-events-auto"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +187,7 @@ export default function CatalogPage() {
       </header>
 
       {/* Katalog */}
-      <section className="max-w-5xl mx-auto p-6 md:p-10 pt-4">
+      <section className="relative z-10 max-w-5xl mx-auto p-6 md:p-10 pt-4 pointer-events-none">
         <header className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-neutral-800 tracking-tight">Katalog Pilihan Template</h2>
           <p className="text-neutral-500 mt-1.5 text-xs sm:text-sm">Pilih tema dan ukuran yang kamu inginkan di bawah ini.</p>
@@ -177,7 +195,7 @@ export default function CatalogPage() {
 
         {/* Tabs Filter Kategori */}
         {!loading && categories.length > 1 && (
-          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar pointer-events-auto">
             {categories.map((cat) => {
               const isActive = activeCategory === cat;
               const count =
@@ -193,7 +211,7 @@ export default function CatalogPage() {
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all shrink-0 active:scale-95 ${
                     isActive
                       ? 'bg-neutral-900 text-white shadow-md'
-                      : 'bg-white text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 border border-neutral-200/80'
+                      : 'bg-white/80 backdrop-blur-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 border border-neutral-200/80'
                   }`}
                 >
                   <span>{cat}</span>
@@ -213,17 +231,17 @@ export default function CatalogPage() {
         {loading ? (
           <p className="text-center text-neutral-500 py-12 text-sm">Memuat katalog...</p>
         ) : filteredTemplates.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-neutral-200/80">
+          <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-3xl border border-neutral-200/80">
             <p className="text-neutral-400 text-sm">Belum ada template untuk kategori ini.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pointer-events-auto">
             {filteredTemplates.map((tpl) => {
               const photoList = tpl.image_url ? tpl.image_url.split(',') : [];
 
               return (
-                <div key={tpl.id} className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col">
-                  <div className="w-full relative overflow-hidden bg-gradient-to-br from-rose-50/60 via-amber-50/40 to-sky-50/60 flex items-center justify-center p-6 border-b border-neutral-100">
+                <div key={tpl.id} className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-sm border border-neutral-200 overflow-hidden flex flex-col transition-all hover:shadow-md">
+                  <div className="w-full relative overflow-hidden bg-gradient-to-br from-rose-50/60 via-amber-50/40 to-sky-50/60 flex items-center justify-center p-6 border-b border-neutral-100 pointer-events-none">
                     <div className="absolute -top-12 -left-12 w-36 h-36 bg-pink-200/40 rounded-full blur-2xl pointer-events-none" />
                     <div className="absolute -bottom-12 -right-12 w-36 h-36 bg-sky-200/40 rounded-full blur-2xl pointer-events-none" />
                     <PolaroidSlider images={photoList} name={tpl.name} />
@@ -246,7 +264,7 @@ export default function CatalogPage() {
                         {tpl.template_variants?.map((v) => (
                           <div
                             key={v.id}
-                            className="flex justify-between items-center bg-neutral-50 border border-neutral-200/80 p-3 rounded-xl text-sm"
+                            className="flex justify-between items-center bg-neutral-50/80 border border-neutral-200/80 p-3 rounded-xl text-sm"
                           >
                             <div>
                               <span className="font-medium text-neutral-700 block">{v.size_name}</span>
@@ -255,7 +273,7 @@ export default function CatalogPage() {
                             <button
                               type="button"
                               onClick={() => addToCart(tpl, v)}
-                              className="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition"
+                              className="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition active:scale-95"
                             >
                               + Keranjang
                             </button>
@@ -273,7 +291,7 @@ export default function CatalogPage() {
 
       {/* Sidebar Keranjang */}
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-all pointer-events-auto">
           <div className="w-full max-w-md bg-white h-full shadow-2xl flex flex-col justify-between p-6">
             <div>
               <div className="flex justify-between items-center border-b border-neutral-100 pb-4 mb-4">
@@ -305,7 +323,7 @@ export default function CatalogPage() {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.templateId, item.variantId, -1)}
-                          className="w-7 h-7 bg-white border border-neutral-200 rounded-md font-bold text-neutral-700 hover:bg-neutral-100"
+                          className="w-7 h-7 bg-white border border-neutral-200 rounded-md font-bold text-neutral-700 hover:bg-neutral-100 active:scale-95"
                         >
                           -
                         </button>
@@ -313,7 +331,7 @@ export default function CatalogPage() {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.templateId, item.variantId, 1)}
-                          className="w-7 h-7 bg-white border border-neutral-200 rounded-md font-bold text-neutral-700 hover:bg-neutral-100"
+                          className="w-7 h-7 bg-white border border-neutral-200 rounded-md font-bold text-neutral-700 hover:bg-neutral-100 active:scale-95"
                         >
                           +
                         </button>
@@ -324,7 +342,7 @@ export default function CatalogPage() {
               )}
             </div>
 
-            <div className="border-t border-neutral-200 pt-4">
+            <div className="border-t border-neutral-200 pt-4 bg-white">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-neutral-600 font-medium">Total Tagihan:</span>
                 <span className="text-xl font-bold text-emerald-600">Rp{totalBelanja.toLocaleString('id-ID')}</span>
@@ -333,7 +351,7 @@ export default function CatalogPage() {
                 type="button"
                 disabled={cart.length === 0}
                 onClick={handleCheckoutWA}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-300 text-white font-semibold py-3 rounded-xl transition"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-300 text-white font-semibold py-3 rounded-xl transition active:scale-95"
               >
                 Checkout ke WhatsApp
               </button>
@@ -342,7 +360,10 @@ export default function CatalogPage() {
         </div>
       )}
 
-      <MusicPlayer />
+      {/* Music Player */}
+      <div className="relative z-40 pointer-events-auto">
+        <MusicPlayer />
+      </div>
     </main>
   );
 }
